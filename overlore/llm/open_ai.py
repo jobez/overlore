@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import Any, cast
 
 from openai import OpenAI
@@ -21,6 +22,8 @@ from overlore.sqlite.constants import EventType
 from overlore.sqlite.types import StoredEvent
 from overlore.utils import get_enum_name_by_value, str_to_json
 
+logger = logging.getLogger("overlore")
+
 
 class OpenAIHandler:
     _instance: OpenAIHandler | None = None
@@ -35,7 +38,7 @@ class OpenAIHandler:
     @classmethod
     def instance(cls) -> OpenAIHandler:
         if cls._instance is None:
-            print("Generating OpenAIHandler interface")
+            logger.debug("Generating OpenAIHandler interface")
             cls._instance = cls.__new__(cls)
         return cls._instance
 
