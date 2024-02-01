@@ -7,6 +7,7 @@ import backoff
 import requests
 from backoff._typing import Details
 from gql import Client, gql  # pip install --pre gql[websockets]
+from gql.transport.exceptions import TransportError
 from gql.transport.websockets import WebsocketsTransport
 
 from overlore.eternum.constants import Realms
@@ -89,7 +90,7 @@ def backoff_logging(details: Details) -> None:
     )
 
 
-@backoff.on_exception(backoff.expo, Exception, max_time=300, on_backoff=backoff_logging)
+@backoff.on_exception(backoff.expo, TransportError, on_backoff=backoff_logging)
 async def torii_subscription_connection(
     torii_service_endpoint: str, on_event_callback: OnEventCallbackType, subscriptions: list[Subscriptions]
 ) -> None:
